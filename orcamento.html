@@ -857,7 +857,7 @@
                                 opt.style.borderColor = 'var(--glass-border)';
                             });
                         } else {
-                            showNotification(data.message, 'error');
+                            showNotification(data.message || 'Erro ao processar solicitação', 'error');
                         }
                     })
                     .catch(error => {
