@@ -573,7 +573,91 @@ body {
     box-shadow: 0 10px 30px rgba(0, 255, 136, 0.4);
 }
 
-/* Footer */
+/* Marca d'água */
+.watermark {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 120px;
+    height: 120px;
+    background: linear-gradient(135deg, rgba(0, 255, 136, 0.1), rgba(0, 255, 136, 0.05));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0.8;
+    animation: watermarkFloat 6s ease-in-out infinite;
+    backdrop-filter: blur(5px);
+    border: 2px solid rgba(0, 255, 136, 0.2);
+}
+
+.watermark i {
+    font-size: 3rem;
+    color: rgba(0, 255, 136, 0.3);
+    animation: watermarkPulse 3s ease-in-out infinite;
+}
+
+.watermark-text {
+    position: absolute;
+    bottom: -25px;
+    right: 0;
+    font-size: 0.7rem;
+    color: rgba(0, 255, 136, 0.4);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+@keyframes watermarkFloat {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-10px) rotate(5deg); }
+}
+
+@keyframes watermarkPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
+}
+
+/* Ocultar marca d'água em mobile */
+@media (max-width: 768px) {
+    .watermark {
+        width: 80px;
+        height: 80px;
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .watermark i {
+        font-size: 2rem;
+    }
+    
+    .watermark-text {
+        font-size: 0.6rem;
+        bottom: -20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .watermark {
+        width: 60px;
+        height: 60px;
+        bottom: 10px;
+        right: 10px;
+    }
+    
+    .watermark i {
+        font-size: 1.5rem;
+    }
+    
+    .watermark-text {
+        display: none;
+    }
+}
+
+/* Footer Styles */
 .footer {
     background: var(--primary-dark);
     padding: 4rem 0 2rem;
