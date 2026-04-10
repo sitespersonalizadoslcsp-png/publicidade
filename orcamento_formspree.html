@@ -539,7 +539,7 @@
                 
                 <div class="formspree-status" id="formspree-status"></div>
                 
-                <form action="https://formspree.io/f/xyz123" method="POST" id="orcamentoForm" class="orcamento-form">
+                <form action="https://formspree.io/f/mrbpzydj" method="POST" id="orcamentoForm" class="orcamento-form">
                     <!-- Campos ocultos para capturar serviços e urgência -->
                     <input type="hidden" name="servicos_selecionados" id="servicos_selecionados">
                     <input type="hidden" name="urgencia_selecionada" id="urgencia_selecionada">
@@ -745,6 +745,12 @@
         </div>
     </footer>
 
+    <!-- Marca d'água -->
+    <div class="watermark">
+        <i class="fas fa-shield-alt"></i>
+        <span class="watermark-text">Shield Security</span>
+    </div>
+    
     <script src="script.js"></script>
     <script>
         // Script específico da página de orçamento com Formspree
@@ -816,15 +822,70 @@
             
             // Callback do Formspree
             orcamentoForm.addEventListener('submit', function(e) {
-                // Formspree vai redirecionar ou mostrar mensagem
-                // Adicionamos um fallback caso não funcione
-                setTimeout(() => {
-                    if (submitBtn.disabled) {
-                        submitBtn.disabled = false;
-                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitação';
-                        showStatus('Se a mensagem não foi enviada, por favor tente novamente ou entre em contato direto.', 'error');
+                // Prevenir comportamento padrão para controle manual
+                e.preventDefault();
+                
+                // Validar novamente antes do envio
+                const servicos = document.querySelectorAll('input[name="servicos"]:checked');
+                const urgencia = document.querySelector('input[name="urgencia"]:checked');
+                
+                if (servicos.length === 0) {
+                    showStatus('Por favor, selecione pelo menos um serviço.', 'error');
+                    return false;
+                }
+                
+                if (!urgencia) {
+                    showStatus('Por favor, selecione o nível de urgência.', 'error');
+                    return false;
+                }
+                
+                // Mostrar loading
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                showStatus('Enviando sua solicitação...', 'success');
+                
+                // Enviar via Fetch API
+                const formData = new FormData(orcamentoForm);
+                
+                fetch(orcamentoForm.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'Accept': 'application/json'
                     }
-                }, 10000); // 10 segundos de timeout
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    }
+                    throw new Error('Erro no servidor');
+                })
+                .then(data => {
+                    showStatus('✅ Solicitação enviada com sucesso! Entraremos em contato em até 24 horas.', 'success');
+                    orcamentoForm.reset();
+                    
+                    // Resetar seleções visuais
+                    urgencyOptions.forEach(opt => opt.classList.remove('selected'));
+                    serviceOptions.forEach(opt => {
+                        opt.style.background = 'rgba(255, 255, 255, 0.05)';
+                        opt.style.borderColor = 'var(--glass-border)';
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro:', error);
+                    showStatus('❌ Erro ao enviar. Tente novamente ou entre em contato direto.', 'error');
+                })
+                .finally(() => {
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitação';
+                    
+                    // Esconder mensagem após 5 segundos
+                    setTimeout(() => {
+                        if (statusDiv.textContent.includes('sucesso')) {
+                            statusDiv.style.display = 'none';
+                        }
+                    }, 5000);
+                });
             });
             
             // Função para mostrar status
