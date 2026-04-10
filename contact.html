@@ -3,241 +3,650 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contato - Shield Security</title>
+    <title>Contato - Segurança Total</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        /* Contact Page Specific Styles */
+        .contact-hero {
+            padding: 150px 0 100px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .contact-hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--text-light), var(--neon-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .contact-hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+
+        .contact-container {
+            padding: 100px 0;
+            background: var(--secondary-dark);
+        }
+
+        .contact-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            padding: 2rem;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            transform: translateX(10px);
+            border-color: var(--accent-yellow);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+        }
+
+        .contact-item i {
+            font-size: 2.5rem;
+            color: var(--accent-yellow);
+            width: 60px;
+            text-align: center;
+            min-width: 60px;
+        }
+
+        .contact-item-content h3 {
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .contact-item-content p {
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        .contact-form {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 3rem;
+            position: relative;
+        }
+
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+            border-radius: 20px 20px 0 0;
+        }
+
+        .form-title {
+            font-size: 2rem;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .form-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+        }
+
+        .form-group {
+            margin-bottom: 2rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent-yellow);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+
+        /* Fix for dropdown visibility */
+        .form-group select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23FFD700' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 20px;
+            padding-right: 45px;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        .form-group select option {
+            background: var(--secondary-dark);
+            color: var(--text-light);
+            padding: 10px;
+        }
+
+        .form-group select option:hover {
+            background: var(--accent-yellow);
+            color: var(--primary-dark);
+        }
+
+        .form-group input::placeholder,
+        .form-group textarea::placeholder {
+            color: var(--text-gray);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .map-section {
+            padding: 100px 0;
+            background: var(--primary-dark);
+        }
+
+        .map-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--accent-yellow);
+            position: relative;
+        }
+
+        .map-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+        }
+
+        .map-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .map-placeholder {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-gray);
+            font-size: 1.2rem;
+        }
+
+        .faq-section {
+            padding: 100px 0;
+            background: var(--secondary-dark);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .faq-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--accent-yellow);
+            position: relative;
+        }
+
+        .faq-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+        }
+
+        .faq-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-light);
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 215, 0, 0.05);
+            color: var(--neon-yellow);
+        }
+
+        .faq-question i {
+            color: var(--accent-yellow);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        .faq-answer.active {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 200px;
+        }
+
+        .success-message {
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            color: var(--accent-yellow);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .error-message {
+            background: rgba(255, 59, 48, 0.1);
+            border: 1px solid rgba(255, 59, 48, 0.3);
+            color: #ff3b30;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .contact-hero-title {
+                font-size: 2rem;
+            }
+
+            .contact-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .contact-form {
+                padding: 2rem;
+            }
+
+            .map-placeholder {
+                height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .contact-hero-title {
+                font-size: 1.5rem;
+            }
+
+            .contact-item {
+                padding: 1.5rem;
+            }
+
+            .contact-item i {
+                font-size: 2rem;
+                width: 50px;
+                min-width: 50px;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .form-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Menu Fixo -->
+    <!-- Header -->
     <header class="header">
         <nav class="navbar">
             <div class="nav-container">
                 <div class="nav-logo">
                     <i class="fas fa-shield-alt"></i>
-                    <span>Shield Security</span>
+                    <span>Segurança Total</span>
                 </div>
                 <ul class="nav-menu">
-                    <li><a href="index.html" class="nav-link">Início</a></li>
-                    <li><a href="services.html" class="nav-link">Serviços</a></li>
-                    <li><a href="about.html" class="nav-link">Sobre Nós</a></li>
-                    <li><a href="orcamento.html" class="nav-link">Orçamento</a></li>
-                    <li><a href="contact.html" class="nav-link active">Contato</a></li>
-                    <li><a href="login.html" class="nav-link login-btn">Área Cliente</a></li>
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="services.html" class="nav-link">Serviços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="plans.html" class="nav-link">Planos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="about.html" class="nav-link">Sobre Nós</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="login.html" class="nav-link login-btn">Área Restrita</a>
+                    </li>
                 </ul>
-                <div class="hamburguer">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
                 </div>
             </div>
         </nav>
     </header>
 
-    <main class="contact-page">
-        <!-- Hero Section -->
-        <section class="page-hero">
-            <div class="hero-overlay"></div>
-            <div class="container">
-                <div class="page-hero-content">
-                    <h1>Entre em Contato</h1>
-                    <p>Estamos prontos para proteger o que é mais importante para você</p>
-                    <div class="breadcrumb">
-                        <a href="index.html">Início</a>
-                        <i class="fas fa-chevron-right"></i>
-                        <span>Contato</span>
-                    </div>
-                </div>
+    <main>
+        <!-- Contact Hero Section -->
+        <section class="contact-hero">
+            <div class="contact-hero-content">
+                <h1 class="contact-hero-title">Entre em Contato</h1>
+                <p class="contact-hero-subtitle">Estamos prontos para proteger o que importa para você. Fale conosco!</p>
             </div>
         </section>
 
-        <!-- Contact Info Section -->
-        <section class="contact-info-section">
+        <!-- Section Divider -->
+        <div class="section-divider-alt">
             <div class="container">
-                <div class="contact-info-grid">
-                    <div class="contact-info-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone-alt"></i>
-                        </div>
-                        <h3>Telefone</h3>
-                        <p>(11) 4002-8922</p>
-                        <span>Segunda a Sexta: 8h às 18h</span>
-                    </div>
-                    <div class="contact-info-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-whatsapp"></i>
-                        </div>
-                        <h3>WhatsApp</h3>
-                        <p>(11) 98765-4321</p>
-                        <span>Disponível 24/7</span>
-                    </div>
-                    <div class="contact-info-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <h3>Gmail</h3>
-                        <p>shieldsecurity@gmail.com</p>
-                        <span>Resposta em até 24h</span>
-                    </div>
-                    <div class="contact-info-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
-                        </div>
-                        <h3>Endereço</h3>
-                        <p>Av. Paulista, 1000</p>
-                        <span>São Paulo - SP</span>
-                    </div>
-                </div>
+                <h2 class="section-title">Fale Conosco</h2>
+                <p class="section-subtitle">Estamos à disposição para atender suas necessidades de segurança</p>
             </div>
-        </section>
+        </div>
 
-        <!-- Main Contact Section -->
-        <section class="main-contact-section">
-            <div class="container">
-                <div class="contact-content">
-                    <div class="contact-details-section">
-                        <div class="details-header">
-                            <h2>Por Que Escolher a Shield Security?</h2>
+        <!-- Contact Section -->
+        <section class="contact-container">
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item" onclick="openWhatsApp()">
+                        <i class="fas fa-phone"></i>
+                        <div class="contact-item-content">
+                            <h3>Telefone</h3>
+                            <p>+55 (65)993467390</p>
+                            <p>Segunda a Sexta: 8h às 18h</p>
                         </div>
-                        
-                        <div class="reasons-list">
-                            <div class="reason-item">
-                                <div class="reason-icon">
-                                    <i class="fas fa-clock"></i>
-                                </div>
-                                <div class="reason-content">
-                                    <h4>Atendimento Rápido</h4>
-                                    <p>Respondemos em até 24 horas e iniciamos projetos em até 48 horas após aprovação.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="reason-item">
-                                <div class="reason-icon">
-                                    <i class="fas fa-certificate"></i>
-                                </div>
-                                <div class="reason-content">
-                                    <h4>Equipe Certificada</h4>
-                                    <p>Todos nossos profissionais são treinados e certificados pelas melhores instituições.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="reason-item">
-                                <div class="reason-icon">
-                                    <i class="fas fa-award"></i>
-                                </div>
-                                <div class="reason-content">
-                                    <h4>15 Anos de Experiência</h4>
-                                    <p>Mais de uma década protegendo patrimônios e pessoas com excelência.</p>
-                                </div>
-                            </div>
-                            
-                            <div class="reason-item">
-                                <div class="reason-icon">
-                                    <i class="fas fa-tools"></i>
-                                </div>
-                                <div class="reason-content">
-                                    <h4>Tecnologia de Ponta</h4>
-                                    <p>Utilizamos os mais avançados sistemas de segurança do mercado.</p>
-                                </div>
-                            </div>
+                    </div>
+                    <div class="contact-item" onclick="openGmail()">
+                        <i class="fas fa-envelope"></i>
+                        <div class="contact-item-content">
+                            <h3>E-mail</h3>
+                            <p>sites.personalizados.lcsp@gmail.com</p>
+                            <p>Resposta em até 24 horas</p>
                         </div>
-                        
-                        <div class="emergency-contact">
-                            <div class="emergency-header">
-                                <i class="fas fa-exclamation-triangle"></i>
-                                <h3>Contato de Emergência</h3>
-                            </div>
-                            <p>Para emergências 24/7, ligue para nossa central:</p>
-                            <div class="emergency-number">
-                                <i class="fas fa-phone-alt"></i>
-                                <span>0800-123-4567</span>
-                            </div>
+                    </div>
+                    <div class="contact-item" onclick="openMaps()">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="contact-item-content">
+                            <h3>Endereço</h3>
+                            <p>Brasil</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-clock"></i>
+                        <div class="contact-item-content">
+                            <h3>Atendimento</h3>
+                            <p>Emergência: Seg. a Sáb.</p>
+                            <p>Comercial: Seg. a Sex. das 13:00 às 20:00</p>
                         </div>
                     </div>
                 </div>
+
+                <form class="contact-form" id="contactForm">
+                    <h2 class="form-title">Envie sua Mensagem</h2>
+                    <div class="success-message" id="successMessage">
+                        Mensagem enviada com sucesso! Entraremos em contato em breve.
+                    </div>
+                    <div class="error-message" id="errorMessage">
+                        Erro ao enviar mensagem. Tente novamente.
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Nome *</label>
+                            <input type="text" id="name" name="name" required placeholder="Seu nome completo">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">E-mail *</label>
+                            <input type="email" id="email" name="email" required placeholder="seu@email.com">
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone">Telefone</label>
+                            <input type="tel" id="phone" name="phone" placeholder="(11) 00000-0000">
+                        </div>
+                        <div class="form-group">
+                            <label for="service">Serviço de Interesse</label>
+                            <select id="service" name="service">
+                                <option value="">Selecione um serviço</option>
+                                <option value="vigilancia">Vigilância Patrimonial</option>
+                                <option value="monitoramento">Monitoramento por Câmeras</option>
+                                <option value="seguranca">Segurança Privada</option>
+                                <option value="acesso">Controle de Acesso</option>
+                                <option value="outro">Outro</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Assunto *</label>
+                        <input type="text" id="subject" name="subject" required placeholder="Assunto da mensagem">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Mensagem *</label>
+                        <textarea id="message" name="message" required placeholder="Descreva sua necessidade ou dúvida..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submitBtn">
+                        <i class="fas fa-paper-plane"></i> Enviar Mensagem
+                    </button>
+                </form>
             </div>
         </section>
 
         <!-- Map Section -->
         <section class="map-section">
-            <div class="container">
-                <div class="map-header">
-                    <h2>Onde Estamos</h2>
-                    <p>Visite nossa sede em São Paulo ou agende uma visita técnica</p>
-                </div>
-                <div class="map-container">
-                    <div class="map-placeholder">
-                        <i class="fas fa-map-marked-alt"></i>
-                        <p>Mapa Interativo</p>
-                        <span>Av. Paulista, 1000 - São Paulo, SP</span>
-                    </div>
-                    <div class="map-info">
-                        <div class="info-item">
-                            <i class="fas fa-car"></i>
-                            <h4>Estacionamento</h4>
-                            <p>Estacionamento conveniado disponível no local</p>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-subway"></i>
-                            <h4>Transporte Público</h4>
-                            <p>Metrô Estação Consolação - 5 minutos a pé</p>
-                        </div>
-                        <div class="info-item">
-                            <i class="fas fa-clock"></i>
-                            <h4>Horário de Funcionamento</h4>
-                            <p>Segunda a Sexta: 8h às 18h<br>Sábado: 9h às 13h</p>
-                        </div>
-                    </div>
+            <div class="map-container">
+                <h2 class="map-title">Onde Estamos</h2>
+                <div class="map-placeholder">
+                    <i class="fas fa-map-marked-alt" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>Mapa interativo disponível em breve</p>
+                    <p style="font-size: 1rem; margin-top: 0.5rem;">Av. Paulista, 1000 - Bela Vista, São Paulo/SP</p>
                 </div>
             </div>
         </section>
 
+        <!-- Wave Divider -->
+        <div class="wave-divider">
+            <div class="container">
+                <h2 class="section-title">Dúvidas Comuns</h2>
+                <p class="section-subtitle">Respostas rápidas para suas perguntas sobre nossos serviços</p>
+            </div>
+        </div>
+
         <!-- FAQ Section -->
         <section class="faq-section">
-            <div class="container">
-                <div class="section-header">
-                    <h2>Perguntas Frequentes</h2>
-                    <p>Tire suas dúvidas sobre nossos serviços</p>
+            <div class="faq-container">
+                <h2 class="faq-title">Dúvidas Frequentes</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Como funciona o atendimento de emergência 24/7?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Nosso atendimento de emergência está disponível 24 horas por dia, 7 dias por semana. Basta ligar para nosso número principal e seguir as instruções do menu para ser conectado imediatamente com nossa equipe de plantão.
+                    </div>
                 </div>
-                <div class="faq-list">
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <h4>Como funciona o processo de contratação?</h4>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Após o contato inicial, realizamos uma visita técnica para avaliar suas necessidades, apresentamos uma proposta personalizada e, após aprovação, iniciamos a implementação em até 48 horas.</p>
-                        </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Quanto tempo demora a instalação dos equipamentos?</span>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
-                    
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <h4>Vocês atendem em todo o Brasil?</h4>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Sim, temos equipes e parceiros em todos os estados brasileiros. Nossa sede fica em São Paulo, mas atuamos nacionalmente com o mesmo padrão de qualidade.</p>
-                        </div>
+                    <div class="faq-answer">
+                        O tempo de instalação varia conforme a complexidade do sistema. Para instalações residenciais simples, o prazo é de até 3 dias úteis. Para sistemas corporativos mais complexos, pode levar de 7 a 15 dias úteis.
                     </div>
-                    
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <h4>Quais são os prazos de instalação?</h4>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Os prazos variam conforme a complexidade do projeto. Sistemas de CFTV são instalados em até 3 dias, enquanto projetos integrados podem levar até 15 dias para completa implementação.</p>
-                        </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Vocês atendem em todo o Brasil?</span>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
-                    
-                    <div class="faq-item">
-                        <div class="faq-question">
-                            <h4>O suporte técnico funciona 24/7?</h4>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <div class="faq-answer">
-                            <p>Sim, nossa central de monitoramento e suporte técnico funciona 24 horas por dia, 7 dias por semana, incluindo feriados, para garantir sua segurança total.</p>
-                        </div>
+                    <div class="faq-answer">
+                        Atualmente operamos principalmente no estado de São Paulo, com foco na capital e região metropolitana. Para projetos corporativos em outros estados, avaliamos caso a caso. Entre em contato para verificar sua região.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Existe contrato mínimo de permanência?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Oferecemos flexibilidade nos contratos. Para serviços de monitoramento e vigilância, o contrato mínimo é de 12 meses. Para projetos específicos e eventos, trabalhamos com contratos temporários conforme a necessidade.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Como funciona a manutenção dos equipamentos?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Realizamos manutenção preventiva mensal em todos os equipamentos instalados. Caso ocorra algum problema, nossa equipe técnica está disponível para atendimento emergencial dentro de até 4 horas na capital e 24 horas em outras regiões.
                     </div>
                 </div>
             </div>
@@ -251,23 +660,17 @@
                 <div class="footer-section">
                     <div class="footer-logo">
                         <i class="fas fa-shield-alt"></i>
-                        <span>Shield Security</span>
+                        <span>Segurança Total</span>
                     </div>
-                    <p>Protegendo seu patrimônio com tecnologia e confiança desde 2008.</p>
+                    <p>Sua tranquilidade é nossa prioridade</p>
                 </div>
                 <div class="footer-section">
-                    <h4>Links Rápidos</h4>
-                    <ul>
-                        <li><a href="index.html">Início</a></li>
-                        <li><a href="services.html">Serviços</a></li>
-                        <li><a href="about.html">Sobre Nós</a></li>
-                        <li><a href="contact.html">Contato</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h4>Contato</h4>
+                    <h4>Contato Rápido</h4>
                     <p><i class="fas fa-phone"></i> (11) 4002-8922</p>
-                    <p><i class="fas fa-envelope"></i> contato@shieldsecurity.com.br</p>
+                    <p><i class="fas fa-envelope"></i> contato@segurancatotal.com.br</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Redes Sociais</h4>
                     <div class="social-links">
                         <a href="#" aria-label="Facebook"><i class="fab fa-facebook"></i></a>
                         <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
@@ -277,615 +680,208 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 Shield Security. Todos os direitos reservados.</p>
+                <p>&copy; 2024 Segurança Total. Todos os direitos reservados.</p>
             </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
     <script>
-        // Script específico da página de contato
-        document.addEventListener('DOMContentLoaded', function() {
-            // FAQ Accordion
-            const faqItems = document.querySelectorAll('.faq-item');
-            
-            faqItems.forEach(item => {
-                const question = item.querySelector('.faq-question');
-                const answer = item.querySelector('.faq-answer');
-                const icon = question.querySelector('i');
-                
-                question.addEventListener('click', () => {
-                    const isOpen = item.classList.contains('open');
-                    
-                    // Fechar todos os outros itens
-                    faqItems.forEach(otherItem => {
-                        if (otherItem !== item) {
-                            otherItem.classList.remove('open');
-                            otherItem.querySelector('.faq-answer').style.maxHeight = '0';
-                            otherItem.querySelector('.faq-question i').classList.remove('fa-chevron-up');
-                            otherItem.querySelector('.faq-question i').classList.add('fa-chevron-down');
-                        }
-                    });
-                    
-                    // Toggle item atual
-                    if (isOpen) {
-                        item.classList.remove('open');
-                        answer.style.maxHeight = '0';
-                        icon.classList.remove('fa-chevron-up');
-                        icon.classList.add('fa-chevron-down');
-                    } else {
-                        item.classList.add('open');
-                        answer.style.maxHeight = answer.scrollHeight + 'px';
-                        icon.classList.remove('fa-chevron-down');
-                        icon.classList.add('fa-chevron-up');
-                    }
-                });
-            });
-            
-            // Validação de telefone
-            const phoneInput = document.getElementById('phone');
-            phoneInput.addEventListener('input', function(e) {
-                let value = e.target.value.replace(/\D/g, '');
-                
-                if (value.length <= 11) {
-                    value = value.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
-                } else {
-                    value = value.replace(/^(\d{2})(\d{2})(\d{5})(\d{4}).*/, '+$1 ($2) $3-$4');
-                }
-                
-                e.target.value = value;
-            });
-            
-            // Links de termos
-            document.querySelectorAll('.terms-link').forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    showNotification('Política de Privacidade e Termos de Uso serão abertos em nova janela.', 'info');
-                });
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
             });
         });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(0, 0, 0, 0.98)';
+                header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.3)';
+            }
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isActive = question.classList.contains('active');
+                
+                // Close all other FAQs
+                document.querySelectorAll('.faq-question').forEach(q => {
+                    q.classList.remove('active');
+                    q.nextElementSibling.classList.remove('active');
+                });
+                
+                // Toggle current FAQ
+                if (!isActive) {
+                    question.classList.add('active');
+                    answer.classList.add('active');
+                }
+            });
+        });
+
+        // Initialize EmailJS
+        (function() {
+            emailjs.init("EF8EzOS3wpvbVWTBD"); // Chave pública do EmailJS
+        })();
+
+        // Contact form submission
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                service: document.getElementById('service').value,
+                subject: document.getElementById('subject').value,
+                message: document.getElementById('message').value
+            };
+
+            const submitBtn = document.getElementById('submitBtn');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+
+            // Hide previous messages
+            successMessage.style.display = 'none';
+            errorMessage.style.display = 'none';
+
+            // Validate form
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                errorMessage.textContent = 'Por favor, preencha todos os campos obrigatórios.';
+                errorMessage.style.display = 'block';
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+
+            // Send email using EmailJS
+            emailjs.send('service_r6nuf0b', 'template_57tnczj', {
+                from_name: formData.name,
+                from_email: formData.email,
+                phone: formData.phone,
+                service: formData.service,
+                subject: formData.subject,
+                message: formData.message,
+                to_email: 'sites.personalizados.lcsp@gmail.com' // Email de destino
+            })
+            .then(function(response) {
+                console.log('SUCCESS!', response.status, response.text);
+                
+                // Show success message
+                successMessage.textContent = 'Mensagem enviada com sucesso! Entraremos em contato em breve.';
+                successMessage.style.display = 'block';
+                
+                // Reset form
+                document.getElementById('contactForm').reset();
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Mensagem';
+
+                // Scroll to top of form
+                document.getElementById('contactForm').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 5000);
+            }, function(error) {
+                console.log('FAILED...', error);
+                
+                // Show error message
+                errorMessage.textContent = 'Erro ao enviar mensagem. Tente novamente ou entre em contato por telefone.';
+                errorMessage.style.display = 'block';
+                
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Mensagem';
+            });
+        });
+
+        // Phone mask
+        document.getElementById('phone').addEventListener('input', function(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            
+            if (value.length > 0) {
+                if (value.length <= 2) {
+                    value = `(${value}`;
+                } else if (value.length <= 7) {
+                    value = `(${value.slice(0, 2)}) ${value.slice(2)}`;
+                } else {
+                    value = `(${value.slice(0, 2)}) ${value.slice(2, 7)}-${value.slice(7, 11)}`;
+                }
+            }
+            
+            e.target.value = value;
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Apply animation to contact items
+        document.addEventListener('DOMContentLoaded', () => {
+            const contactItems = document.querySelectorAll('.contact-item');
+            contactItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-30px)';
+                item.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+
+            // Apply animation to FAQ items
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach((item, index) => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateY(30px)';
+                item.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(item);
+            });
+        });
+
+        // Contact redirection functions
+        function openWhatsApp() {
+            window.open('https://wa.me/5565993467390?text=Olá! Gostaria de saber mais sobre os serviços de segurança.', '_blank');
+        }
+
+        function openGmail() {
+            window.open('https://mail.google.com/mail/?view=cm&to=sites.personalizados.lcsp@gmail.com&su=Contato%20via%20Site%20-%20Segurança%20Total&body=Olá!%20Gostaria%20de%20saber%20mais%20sobre%20os%20serviços%20de%20segurança.', '_blank');
+        }
+
+        function openMaps() {
+            window.open('https://maps.google.com/?q=Brasil', '_blank');
+        }
     </script>
 
-    <style>
-        /* Estilos específicos da página de contato */
-        .page-hero {
-            min-height: 60vh;
-            display: flex;
-            align-items: center;
-            background: linear-gradient(135deg, var(--primary-dark), var(--primary-blue));
-            position: relative;
-            overflow: hidden;
-        }
-
-        .page-hero .hero-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(0,255,136,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-            animation: gridMove 20s linear infinite;
-        }
-
-        .page-hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-        }
-
-        .page-hero-content h1 {
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-        }
-
-        .page-hero-content p {
-            font-size: 1.25rem;
-            color: var(--text-gray);
-            margin-bottom: 2rem;
-        }
-
-        .breadcrumb {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            color: var(--text-gray);
-        }
-
-        .breadcrumb a {
-            color: var(--accent-green);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .breadcrumb a:hover {
-            color: var(--text-light);
-        }
-
-        .contact-info-section {
-            padding: 80px 0;
-            background: var(--bg-dark);
-        }
-
-        .contact-info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .contact-info-card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 2rem;
-            text-align: center;
-            transition: var(--transition);
-        }
-
-        .contact-info-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent-green);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .contact-info-card .contact-icon {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1.5rem;
-        }
-
-        .contact-info-card .contact-icon i {
-            font-size: 1.8rem;
-            color: var(--primary-dark);
-        }
-
-        .contact-info-card h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
-            color: var(--text-light);
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-info-card p {
-            font-size: 1rem;
-            color: var(--accent-green);
-            margin-bottom: 0.5rem;
-        }
-
-        .contact-info-card span {
-            font-size: 0.8rem;
-            color: var(--text-gray);
-        }
-
-        .main-contact-section {
-            padding: 50px 0;
-            background: linear-gradient(135deg, var(--primary-blue), var(--bg-light));
-        }
-
-        .contact-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
-
-        .form-header h2 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-        }
-
-        .form-header p {
-            color: var(--text-gray);
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-form {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 2rem;
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-weight: 500;
-            color: var(--text-light);
-            margin-bottom: 0.5rem;
-        }
-
-        .form-group label i {
-            color: var(--accent-green);
-        }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--glass-border);
-            border-radius: 10px;
-            color: var(--text-light);
-            font-family: inherit;
-            font-size: 0.9rem;
-            transition: var(--transition);
-        }
-
-        .form-group input::placeholder,
-        .form-group textarea::placeholder {
-            color: var(--text-gray);
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--accent-green);
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .form-group select {
-            cursor: pointer;
-        }
-
-        .form-group select option {
-            background: var(--primary-dark);
-            color: var(--text-light);
-        }
-
-        .error-message {
-            color: #ef4444;
-            font-size: 0.7rem;
-            margin-top: 0.25rem;
-            display: block;
-        }
-
-        .form-options {
-            display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .privacy-terms,
-        .newsletter {
-            display: flex;
-            align-items: flex-start;
-            gap: 0.4rem;
-        }
-
-        .privacy-terms input,
-        .newsletter input {
-            width: auto;
-            margin-top: 0.2rem;
-        }
-
-        .privacy-terms label,
-        .newsletter label {
-            font-size: 0.8rem;
-            color: var(--text-gray);
-            cursor: pointer;
-        }
-
-        .terms-link {
-            color: var(--accent-green);
-            text-decoration: none;
-            transition: var(--transition);
-        }
-
-        .terms-link:hover {
-            text-decoration: underline;
-        }
-
-        .details-header h2 {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--text-light);
-            margin-bottom: 1.5rem;
-        }
-
-        .reasons-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .reason-item {
-            display: flex;
-            gap: 0.8rem;
-            padding: 1rem;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            transition: var(--transition);
-        }
-
-        .reason-item:hover {
-            transform: translateX(5px);
-            border-color: var(--accent-green);
-        }
-
-        .reason-icon {
-            width: 40px;
-            height: 40px;
-            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .reason-icon i {
-            font-size: 1rem;
-            color: var(--primary-dark);
-        }
-
-        .reason-content h4 {
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-light);
-            margin-bottom: 0.3rem;
-        }
-
-        .reason-content p {
-            color: var(--text-gray);
-            font-size: 0.8rem;
-        }
-
-        .emergency-contact {
-            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-        }
-
-        .emergency-header {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.8rem;
-            margin-bottom: 0.8rem;
-        }
-
-        .emergency-header i {
-            font-size: 1.5rem;
-            color: #ef4444;
-        }
-
-        .emergency-header h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #ef4444;
-        }
-
-        .emergency-contact p {
-            color: var(--text-gray);
-            margin-bottom: 0.8rem;
-            font-size: 0.9rem;
-        }
-
-        .emergency-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.4rem;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #ef4444;
-        }
-
-        .map-section {
-            padding: 40px 0;
-            background: var(--bg-dark);
-        }
-
-        .map-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .map-header h2 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-        }
-
-        .map-header p {
-            color: var(--text-gray);
-        }
-
-        .map-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-        }
-
-        .map-placeholder {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            transition: var(--transition);
-        }
-
-        .map-placeholder:hover {
-            border-color: var(--accent-green);
-        }
-
-        .map-placeholder i {
-            font-size: 3rem;
-            color: var(--accent-green);
-            margin-bottom: 1rem;
-        }
-
-        .map-placeholder p {
-            font-size: 1.2rem;
-            color: var(--text-light);
-            margin-bottom: 0.5rem;
-        }
-
-        .map-placeholder span {
-            color: var(--text-gray);
-        }
-
-        .map-info {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .info-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: var(--transition);
-        }
-
-        .info-item:hover {
-            border-color: var(--accent-green);
-            transform: translateX(10px);
-        }
-
-        .info-item i {
-            font-size: 1.5rem;
-            color: var(--accent-green);
-            margin-bottom: 0.5rem;
-        }
-
-        .info-item h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-light);
-            margin-bottom: 0.5rem;
-        }
-
-        .info-item p {
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
-
-        .faq-section {
-            padding: 80px 0;
-            background: linear-gradient(135deg, var(--primary-blue), var(--bg-light));
-        }
-
-        .faq-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .faq-item {
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border: 1px solid var(--glass-border);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: var(--transition);
-        }
-
-        .faq-item:hover {
-            border-color: var(--accent-green);
-        }
-
-        .faq-item.open {
-            border-color: var(--accent-green);
-        }
-
-        .faq-question {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 1.5rem;
-            cursor: pointer;
-            transition: var(--transition);
-        }
-
-        .faq-question:hover {
-            background: rgba(0, 255, 136, 0.05);
-        }
-
-        .faq-question h4 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-light);
-        }
-
-        .faq-question i {
-            color: var(--accent-green);
-            transition: var(--transition);
-        }
-
-        .faq-answer {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-
-        .faq-answer p {
-            padding: 0 1.5rem 1.5rem;
-            color: var(--text-gray);
-            line-height: 1.6;
-        }
-
-        /* Responsividade */
-        @media (max-width: 768px) {
-            .page-hero-content h1 {
-                font-size: 2.5rem;
-            }
-            
-            .contact-content {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            
-            .map-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .contact-info-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <!-- Watermark -->
+    <div class="watermark">
+        <img src="assets/marca d'água off.png" alt="Marca d'água">
+    </div>
 </body>
 </html>

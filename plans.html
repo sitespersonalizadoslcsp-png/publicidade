@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planos - Segurança Total</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Plans Page Specific Styles */
+        .plans-hero {
+            padding: 150px 0 100px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--secondary-dark) 100%);
+        }
+
+        .plans-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .plans-hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--text-light), var(--neon-yellow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .plans-hero-subtitle {
+            font-size: 1.3rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+
+        .plans-container {
+            padding: 100px 0;
+            background: var(--secondary-dark);
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .pricing-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .pricing-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(255, 215, 0, 0.2);
+            border-color: var(--accent-yellow);
+        }
+
+        .pricing-card.featured {
+            transform: scale(1.05);
+            border-color: var(--accent-yellow);
+            box-shadow: 0 15px 40px rgba(255, 215, 0, 0.3);
+        }
+
+        .pricing-card.featured::before {
+            transform: scaleX(1);
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+            color: var(--primary-dark);
+            padding: 8px 40px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transform: rotate(45deg);
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+        }
+
+        .plan-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--primary-dark);
+            margin: 0 auto 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .pricing-card:hover .plan-icon {
+            transform: scale(1.1) rotate(5deg);
+            box-shadow: 0 10px 25px rgba(255, 215, 0, 0.4);
+        }
+
+        .plan-name {
+            font-size: 1.8rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .plan-price {
+            font-size: 3rem;
+            color: var(--accent-yellow);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-price span {
+            font-size: 1rem;
+            color: var(--text-gray);
+            font-weight: normal;
+        }
+
+        .plan-description {
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .plan-features {
+            list-style: none;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .plan-features li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .plan-features li:hover {
+            color: var(--neon-yellow);
+            transform: translateX(5px);
+        }
+
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+
+        .plan-features i {
+            color: var(--accent-yellow);
+            font-size: 1.1rem;
+            min-width: 20px;
+        }
+
+        .plan-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+            color: var(--primary-dark);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .plan-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
+        }
+
+        .comparison-section {
+            padding: 100px 0;
+            background: var(--primary-dark);
+        }
+
+        .comparison-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--accent-yellow);
+            position: relative;
+        }
+
+        .comparison-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+        }
+
+        .comparison-table {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            overflow: hidden;
+        }
+
+        .comparison-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .comparison-table th {
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+            color: var(--primary-dark);
+            padding: 1.5rem;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .comparison-table td {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+        }
+
+        .comparison-table tr:hover td {
+            background: rgba(255, 215, 0, 0.05);
+        }
+
+        .check-icon {
+            color: var(--accent-yellow);
+            font-size: 1.3rem;
+        }
+
+        .x-icon {
+            color: #ff3b30;
+            font-size: 1.3rem;
+        }
+
+        .faq-section {
+            padding: 100px 0;
+            background: var(--secondary-dark);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .faq-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--accent-yellow);
+            position: relative;
+        }
+
+        .faq-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(45deg, var(--accent-yellow), var(--neon-orange));
+        }
+
+        .faq-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-light);
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: rgba(255, 215, 0, 0.05);
+            color: var(--neon-yellow);
+        }
+
+        .faq-question i {
+            color: var(--accent-yellow);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-question.active i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 1.5rem;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: var(--text-gray);
+            line-height: 1.6;
+        }
+
+        .faq-answer.active {
+            padding: 0 1.5rem 1.5rem;
+            max-height: 200px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .plans-hero-title {
+                font-size: 2rem;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .pricing-card.featured {
+                transform: scale(1);
+            }
+
+            .comparison-table {
+                overflow-x: auto;
+            }
+
+            .comparison-table table {
+                min-width: 600px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .plans-hero-title {
+                font-size: 1.5rem;
+            }
+
+            .plan-price {
+                font-size: 2rem;
+            }
+
+            .pricing-card {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Segurança Total</span>
+                </div>
+                <ul class="nav-menu">
+                    <li class="nav-item">
+                        <a href="index.html" class="nav-link">Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="services.html" class="nav-link">Serviços</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="plans.html" class="nav-link">Planos</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="about.html" class="nav-link">Sobre Nós</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="contact.html" class="nav-link">Contato</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="login.html" class="nav-link login-btn">Área Restrita</a>
+                    </li>
+                </ul>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Plans Hero Section -->
+        <section class="plans-hero">
+            <div class="plans-hero-content">
+                <h1 class="plans-hero-title">Planos de Segurança</h1>
+                <p class="plans-hero-subtitle">Escolha o plano ideal para proteger seu patrimônio com a máxima confiança e tecnologia</p>
+            </div>
+        </section>
+
+        <!-- Section Divider -->
+        <div class="section-divider">
+            <div class="container">
+                <h2 class="section-title">Planos Personalizados</h2>
+                <p class="section-subtitle">Escolha o plano perfeito para suas necessidades de segurança</p>
+            </div>
+        </div>
+
+        <!-- Pricing Cards Section -->
+        <section class="plans-container">
+            <div class="pricing-grid">
+                <!-- Basic Plan -->
+                <div class="pricing-card">
+                    <div class="plan-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h2 class="plan-name">Básico</h2>
+                    <div class="plan-price">
+                        R$ 299<span>/mês</span>
+                    </div>
+                    <p class="plan-description">Proteção essencial para residências e pequenos negócios</p>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Monitoramento 24/7</li>
+                        <li><i class="fas fa-check"></i> 4 Câmeras de segurança</li>
+                        <li><i class="fas fa-check"></i> App de acompanhamento</li>
+                        <li><i class="fas fa-check"></i> Alertas por e-mail</li>
+                        <li><i class="fas fa-check"></i> Suporte técnico básico</li>
+                        <li><i class="fas fa-times"></i> Vigilância presencial</li>
+                        <li><i class="fas fa-times"></i> Controle de acesso</li>
+                    </ul>
+                    <button class="plan-btn" onclick="redirectToWhatsApp('Básico')">Contratar Agora</button>
+                </div>
+
+                <!-- Professional Plan (Featured) -->
+                <div class="pricing-card featured">
+                    <div class="popular-badge">MAIS POPULAR</div>
+                    <div class="plan-icon">
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                    <h2 class="plan-name">Profissional</h2>
+                    <div class="plan-price">
+                        R$ 599<span>/mês</span>
+                    </div>
+                    <p class="plan-description">Solução completa para empresas e condomínios</p>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Monitoramento 24/7 avançado</li>
+                        <li><i class="fas fa-check"></i> 12 Câmeras HD</li>
+                        <li><i class="fas fa-check"></i> App com notificações push</li>
+                        <li><i class="fas fa-check"></i> Vigilância 8h/dia</li>
+                        <li><i class="fas fa-check"></i> Controle de acesso básico</li>
+                        <li><i class="fas fa-check"></i> Suporte prioritário</li>
+                        <li><i class="fas fa-check"></i> Relatórios mensais</li>
+                    </ul>
+                    <button class="plan-btn" onclick="redirectToWhatsApp('Profissional')">Contratar Agora</button>
+                </div>
+
+                <!-- Enterprise Plan -->
+                <div class="pricing-card">
+                    <div class="plan-icon">
+                        <i class="fas fa-building"></i>
+                    </div>
+                    <h2 class="plan-name">Empresarial</h2>
+                    <div class="plan-price">
+                        R$ 1.299<span>/mês</span>
+                    </div>
+                    <p class="plan-description">Segurança de alto nível para grandes corporações</p>
+                    <ul class="plan-features">
+                        <li><i class="fas fa-check"></i> Monitoramento 24/7 premium</li>
+                        <li><i class="fas fa-check"></i> Câmeras ilimitadas</li>
+                        <li><i class="fas fa-check"></i> Painel de controle avançado</li>
+                        <li><i class="fas fa-check"></i> Vigilância 24/7</li>
+                        <li><i class="fas fa-check"></i> Controle de acesso total</li>
+                        <li><i class="fas fa-check"></i> Equipe dedicada</li>
+                        <li><i class="fas fa-check"></i> Inteligência artificial</li>
+                        <li><i class="fas fa-check"></i> Consultoria especializada</li>
+                    </ul>
+                    <button class="plan-btn" onclick="redirectToWhatsApp('Empresarial')">Fale com Consultor</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Comparison Table Section -->
+        <section class="comparison-section">
+            <div class="container">
+                <h2 class="comparison-title">Comparativo de Planos</h2>
+                <div class="comparison-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Recursos</th>
+                                <th>Básico</th>
+                                <th>Profissional</th>
+                                <th>Empresarial</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Monitoramento 24/7</td>
+                                <td><i class="fas fa-check check-icon"></i></td>
+                                <td><i class="fas fa-check check-icon"></i></td>
+                                <td><i class="fas fa-check check-icon"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Câmeras de Segurança</td>
+                                <td>4</td>
+                                <td>12</td>
+                                <td>Ilimitadas</td>
+                            </tr>
+                            <tr>
+                                <td>Vigilância Presencial</td>
+                                <td><i class="fas fa-times x-icon"></i></td>
+                                <td>8h/dia</td>
+                                <td>24/7</td>
+                            </tr>
+                            <tr>
+                                <td>Controle de Acesso</td>
+                                <td><i class="fas fa-times x-icon"></i></td>
+                                <td><i class="fas fa-check check-icon"></i></td>
+                                <td><i class="fas fa-check check-icon"></i></td>
+                            </tr>
+                            <tr>
+                                <td>Suporte Técnico</td>
+                                <td>Básico</td>
+                                <td>Prioritário</td>
+                                <td>Dedicado</td>
+                            </tr>
+                            <tr>
+                                <td>Relatórios</td>
+                                <td><i class="fas fa-times x-icon"></i></td>
+                                <td>Mensais</td>
+                                <td>Tempo real</td>
+                            </tr>
+                            <tr>
+                                <td>Inteligência Artificial</td>
+                                <td><i class="fas fa-times x-icon"></i></td>
+                                <td><i class="fas fa-times x-icon"></i></td>
+                                <td><i class="fas fa-check check-icon"></i></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Wave Divider -->
+        <div class="wave-divider">
+            <div class="container">
+                <h2 class="section-title">Tire Suas Dúvidas</h2>
+                <p class="section-subtitle">Respostas para as perguntas mais comuns sobre nossos planos</p>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="faq-container">
+                <h2 class="faq-title">Dúvidas Frequentes</h2>
+                
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Posso mudar de plano a qualquer momento?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Sim! Você pode upgrade ou downgrade seu plano a qualquer momento. A mudança será efetivada no próximo ciclo de faturamento.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>O contrato tem tempo mínimo de permanência?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Oferemos flexibilidade total. Planos Básico e Profissional têm contrato mensal. O plano Empresarial pode ter condições especiais conforme negociação.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>A instalação das câmeras está incluída?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Sim, a instalação inicial está incluída em todos os planos. Planos Profissional e Empresarial incluem manutenção preventiva mensal.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Como funciona o suporte técnico?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Suporte Básico: atendimento via e-mail em até 48h. Suporte Prioritário: telefone e chat 24/7. Suporte Dedicado: gerente exclusivo e resposta imediata.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Os planos incluem seguro contra roubo?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        O serviço de segurança visa prevenir incidentes. Seguros contra roubo podem ser contratados separadamente através de nossos parceiros com condições especiais.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-shield-alt"></i>
+                        <span>Segurança Total</span>
+                    </div>
+                    <p>Sua tranquilidade é nossa prioridade</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Contato Rápido</h4>
+                    <p><i class="fas fa-phone"></i> +55 (65)993467390</p>
+                    <p><i class="fas fa-envelope"></i> sites.personalizados.lcsp@gmail.com</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Redes Sociais</h4>
+                    <div class="social-links">
+                        <a href="https://mail.google.com/mail/?view=cm&to=sites.personalizados.lcsp@gmail.com" target="_blank" aria-label="Email"><i class="fas fa-envelope"></i></a>
+                        <a href="https://www.instagram.com/lcsp.web/" target="_blank" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="WhatsApp"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Segurança Total. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+            });
+        });
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                const isActive = question.classList.contains('active');
+                
+                // Close all other FAQs
+                document.querySelectorAll('.faq-question').forEach(q => {
+                    q.classList.remove('active');
+                    q.nextElementSibling.classList.remove('active');
+                });
+                
+                // Toggle current FAQ
+                if (!isActive) {
+                    question.classList.add('active');
+                    answer.classList.add('active');
+                }
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('.header');
+            if (window.scrollY > 100) {
+                header.style.background = 'rgba(0, 0, 0, 0.98)';
+                header.style.boxShadow = '0 4px 30px rgba(0, 0, 0, 0.5)';
+            } else {
+                header.style.background = 'rgba(0, 0, 0, 0.95)';
+                header.style.boxShadow = '0 2px 20px rgba(0, 0, 0, 0.3)';
+            }
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // WhatsApp redirect function
+        function redirectToWhatsApp(planName) {
+            // Número de WhatsApp placeholder (substituir pelo número real quando disponível)
+            const phoneNumber = '5511999999999'; // Formato: 55 + DDD + número
+            
+            // Mensagem personalizada conforme o plano
+            const messages = {
+                'Básico': 'Olá! Tenho interesse no Plano Básico de segurança (R$ 299/mês). Poderiam me fornecer mais informações?',
+                'Profissional': 'Olá! Tenho interesse no Plano Profissional de segurança (R$ 599/mês). Poderiam me fornecer mais informações?',
+                'Empresarial': 'Olá! Tenho interesse no Plano Empresarial de segurança (R$ 1.299/mês). Gostaria de falar com um consultor.'
+            };
+            
+            const message = encodeURIComponent(messages[planName] || 'Olá! Tenho interesse nos planos de segurança.');
+            
+            // Constrói a URL do WhatsApp
+            const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+            
+            // Abre o WhatsApp em uma nova aba
+            window.open(whatsappUrl, '_blank');
+            
+            // Log para fins de debug (pode ser removido)
+            console.log(`Redirecionando para WhatsApp - Plano: ${planName}`);
+        }
+
+        // Apply animation to pricing cards
+        document.addEventListener('DOMContentLoaded', () => {
+            const pricingCards = document.querySelectorAll('.pricing-card');
+            pricingCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+
+            // Apply animation to FAQ items
+            const faqItems = document.querySelectorAll('.faq-item');
+            faqItems.forEach(item => {
+                item.style.opacity = '0';
+                item.style.transform = 'translateX(-30px)';
+                item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(item);
+            });
+        });
+    </script>
+
+    <!-- Watermark -->
+    <div class="watermark">
+        <img src="assets/marca d'água off.png" alt="Marca d'água">
+    </div>
+</body>
+</html>
