@@ -839,7 +839,12 @@
                         method: 'POST',
                         body: formData
                     })
-                    .then(response => response.json())
+                    .then(response => {
+                        if (response.ok) {
+                            return response.json();
+                        }
+                        throw new Error('Erro no servidor');
+                    })
                     .then(data => {
                         if (data.success) {
                             showNotification(data.message, 'success');
