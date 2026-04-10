@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitar Orçamento - Shield Security</title>
+    <title>Solicitar Orçamento - Shield Security (Formspree)</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Orçamento Formspree Compact Styles */
+        /* Orçamento Page Compact Styles */
         .orcamento-main {
             padding: 1.5rem;
             background: var(--bg-dark);
@@ -338,6 +338,12 @@
             box-shadow: 0 8px 16px rgba(0, 255, 136, 0.3);
         }
         
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
         .btn-secondary {
             background: transparent;
             color: var(--text-light);
@@ -387,24 +393,34 @@
             color: var(--text-gray);
         }
         
-        .success-message {
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.3);
-            color: var(--accent-green);
-            padding: 1rem;
-            border-radius: 8px;
+        .error-message {
+            color: #ef4444;
+            font-size: 0.7rem;
+            margin-top: 0.2rem;
+            display: block;
+        }
+        
+        .formspree-status {
+            padding: 0.5rem;
+            border-radius: 5px;
             margin-bottom: 1rem;
+            text-align: center;
+            font-size: 0.85rem;
             display: none;
         }
         
-        .error-message {
-            background: rgba(239, 68, 68, 0.1);
-            border: 1px solid rgba(239, 68, 68, 0.3);
+        .formspree-status.success {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+            display: block;
+        }
+        
+        .formspree-status.error {
+            background: rgba(239, 68, 68, 0.2);
             color: #ef4444;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            display: none;
+            border: 1px solid #ef4444;
+            display: block;
         }
         
         @media (max-width: 768px) {
@@ -453,7 +469,7 @@
                     <li><a href="index.html" class="nav-link">Início</a></li>
                     <li><a href="services.html" class="nav-link">Serviços</a></li>
                     <li><a href="about.html" class="nav-link">Sobre Nós</a></li>
-                    <li><a href="orcamento.html" class="nav-link active">Orçamento</a></li>
+                    <li><a href="orcamento.html" class="nav-link">Orçamento</a></li>
                     <li><a href="contact.html" class="nav-link">Contato</a></li>
                     <li><a href="login.html" class="nav-link login-btn">Área Cliente</a></li>
                 </ul>
@@ -521,20 +537,12 @@
                     <p>Quanto mais detalhes você fornecer, melhor será sua proposta</p>
                 </div>
                 
-                <div class="success-message" id="successMessage">
-                    <i class="fas fa-check-circle"></i>
-                    <strong>Sucesso!</strong> Sua solicitação foi enviada. Entraremos em contato em até 24 horas.
-                </div>
+                <div class="formspree-status" id="formspree-status"></div>
                 
-                <div class="error-message" id="errorMessage">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <strong>Erro!</strong> Ocorreu um problema ao enviar sua solicitação. Tente novamente.
-                </div>
-                
-                <form action="https://formspree.io/f/xdroyvaj" method="POST" class="orcamento-form" id="orcamentoForm">
-                    <!-- Campo oculto para Formspree -->
-                    <input type="hidden" name="_subject" value="Nova Solicitação de Orçamento - Shield Security">
-                    <input type="hidden" name="_template" value="table">
+                <form action="https://formspree.io/f/xyz123" method="POST" id="orcamentoForm" class="orcamento-form">
+                    <!-- Campos ocultos para capturar serviços e urgência -->
+                    <input type="hidden" name="servicos_selecionados" id="servicos_selecionados">
+                    <input type="hidden" name="urgencia_selecionada" id="urgencia_selecionada">
                     
                     <!-- Dados Pessoais -->
                     <div class="form-section">
@@ -632,17 +640,17 @@
                             </label>
                             <div class="urgency-level">
                                 <div class="urgency-option" data-urgency="baixa">
-                                    <input type="radio" name="urgencia" value="baixa" id="urgencia-baixa" required>
+                                    <input type="radio" name="urgencia" value="baixa" id="urgencia-baixa">
                                     <i class="fas fa-clock"></i>
                                     <span>Normal</span>
                                 </div>
                                 <div class="urgency-option" data-urgency="media">
-                                    <input type="radio" name="urgencia" value="media" id="urgencia-media" required>
+                                    <input type="radio" name="urgencia" value="media" id="urgencia-media">
                                     <i class="fas fa-exclamation-triangle"></i>
                                     <span>Médio</span>
                                 </div>
                                 <div class="urgency-option" data-urgency="alta">
-                                    <input type="radio" name="urgencia" value="alta" id="urgencia-alta" required>
+                                    <input type="radio" name="urgencia" value="alta" id="urgencia-alta">
                                     <i class="fas fa-bolt"></i>
                                     <span>Urgente</span>
                                 </div>
@@ -665,6 +673,10 @@
                                 <input type="checkbox" id="newsletter" name="newsletter">
                                 <label for="newsletter">Deseja receber novidades e promoções?</label>
                             </div>
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="termos" name="termos" required>
+                                <label for="termos">Aceito os termos de uso e política de privacidade *</label>
+                            </div>
                         </div>
                         
                         <div class="form-buttons">
@@ -672,7 +684,7 @@
                                 <i class="fas fa-arrow-left"></i>
                                 Voltar
                             </button>
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" id="submitBtn">
                                 <i class="fas fa-paper-plane"></i>
                                 Enviar Solicitação
                             </button>
@@ -738,10 +750,10 @@
         // Script específico da página de orçamento com Formspree
         document.addEventListener('DOMContentLoaded', function() {
             const orcamentoForm = document.getElementById('orcamentoForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const statusDiv = document.getElementById('formspree-status');
             const urgencyOptions = document.querySelectorAll('.urgency-option');
             const serviceOptions = document.querySelectorAll('.service-option');
-            const successMessage = document.getElementById('successMessage');
-            const errorMessage = document.getElementById('errorMessage');
             
             // Seleção de urgência
             urgencyOptions.forEach(option => {
@@ -750,6 +762,9 @@
                     this.classList.add('selected');
                     const radio = this.querySelector('input[type="radio"]');
                     radio.checked = true;
+                    
+                    // Atualizar campo oculto
+                    document.getElementById('urgencia_selecionada').value = radio.value;
                 });
             });
             
@@ -760,141 +775,84 @@
                     checkbox.checked = !checkbox.checked;
                     this.style.background = checkbox.checked ? 'rgba(0, 255, 136, 0.2)' : 'rgba(255, 255, 255, 0.05)';
                     this.style.borderColor = checkbox.checked ? 'var(--accent-green)' : 'var(--glass-border)';
+                    
+                    // Atualizar campo oculto
+                    updateServicosSelecionados();
                 });
             });
             
-            // Validação e envio do formulário
+            // Função para atualizar serviços selecionados
+            function updateServicosSelecionados() {
+                const servicosSelecionados = [];
+                document.querySelectorAll('input[name="servicos"]:checked').forEach(checkbox => {
+                    servicosSelecionados.push(checkbox.value);
+                });
+                document.getElementById('servicos_selecionados').value = servicosSelecionados.join(', ');
+            }
+            
+            // Validação antes do envio
             orcamentoForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                // Validação básica
-                let isValid = true;
-                let errors = [];
-                
-                // Validar nome
-                const nome = document.getElementById('nome');
-                if (nome.value.trim().length < 3) {
-                    errors.push('Por favor, informe seu nome completo.');
-                    isValid = false;
-                }
-                
-                // Validar email
-                const email = document.getElementById('email');
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                if (!emailRegex.test(email.value)) {
-                    errors.push('Por favor, informe um e-mail válido.');
-                    isValid = false;
-                }
-                
-                // Validar telefone
-                const telefone = document.getElementById('telefone');
-                if (telefone.value.trim().length < 10) {
-                    errors.push('Por favor, informe um telefone válido.');
-                    isValid = false;
-                }
-                
-                // Validar tipo de cliente
-                const tipo = document.getElementById('tipo');
-                if (!tipo.value) {
-                    errors.push('Por favor, selecione o tipo de cliente.');
-                    isValid = false;
-                }
-                
                 // Validar serviços
                 const servicos = document.querySelectorAll('input[name="servicos"]:checked');
                 if (servicos.length === 0) {
-                    errors.push('Por favor, selecione pelo menos um serviço.');
-                    isValid = false;
+                    e.preventDefault();
+                    showStatus('Por favor, selecione pelo menos um serviço.', 'error');
+                    return false;
                 }
                 
                 // Validar urgência
                 const urgencia = document.querySelector('input[name="urgencia"]:checked');
                 if (!urgencia) {
-                    errors.push('Por favor, selecione o nível de urgência.');
-                    isValid = false;
+                    e.preventDefault();
+                    showStatus('Por favor, selecione o nível de urgência.', 'error');
+                    return false;
                 }
                 
-                // Validar mensagem
-                const mensagem = document.getElementById('mensagem');
-                if (mensagem.value.trim().length < 20) {
-                    errors.push('Por favor, forneça mais detalhes sobre suas necessidades (mínimo 20 caracteres).');
-                    isValid = false;
-                }
-                
-                if (!isValid) {
-                    showError(errors.join('<br>'));
-                    return;
-                }
-                
-                // Preparar dados para Formspree
-                const formData = new FormData(orcamentoForm);
-                
-                // Adicionar serviços selecionados como texto
-                const servicosSelecionados = [];
-                document.querySelectorAll('input[name="servicos"]:checked').forEach(checkbox => {
-                    servicosSelecionados.push(checkbox.value);
-                });
-                formData.append('servicos_selecionados', servicosSelecionados.join(', '));
-                
-                // Enviar para Formspree
-                fetch(orcamentoForm.action, {
-                    method: 'POST',
-                    body: formData,
-                    headers: {
-                        'Accept': 'application/json'
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
-                        return response.json();
-                    }
-                    throw new Error('Erro na resposta do servidor');
-                })
-                .then(data => {
-                    showSuccess();
-                    orcamentoForm.reset();
-                    
-                    // Resetar seleções visuais
-                    urgencyOptions.forEach(opt => opt.classList.remove('selected'));
-                    serviceOptions.forEach(opt => {
-                        opt.style.background = 'rgba(255, 255, 255, 0.05)';
-                        opt.style.borderColor = 'var(--glass-border)';
-                    });
-                })
-                .catch(error => {
-                    console.error('Erro:', error);
-                    showError('Ocorreu um erro ao enviar sua solicitação. Por favor, tente novamente.');
-                });
+                // Mostrar loading
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+                showStatus('Enviando sua solicitação...', 'success');
             });
             
-            // Funções de feedback
-            function showSuccess() {
-                successMessage.style.display = 'block';
-                errorMessage.style.display = 'none';
-                successMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                
+            // Callback do Formspree
+            orcamentoForm.addEventListener('submit', function(e) {
+                // Formspree vai redirecionar ou mostrar mensagem
+                // Adicionamos um fallback caso não funcione
                 setTimeout(() => {
-                    successMessage.style.display = 'none';
-                }, 10000);
+                    if (submitBtn.disabled) {
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar Solicitação';
+                        showStatus('Se a mensagem não foi enviada, por favor tente novamente ou entre em contato direto.', 'error');
+                    }
+                }, 10000); // 10 segundos de timeout
+            });
+            
+            // Função para mostrar status
+            function showStatus(message, type) {
+                statusDiv.textContent = message;
+                statusDiv.className = 'formspree-status ' + type;
+                statusDiv.style.display = 'block';
+                
+                if (type === 'success') {
+                    setTimeout(() => {
+                        statusDiv.style.display = 'none';
+                    }, 5000);
+                }
             }
             
-            function showError(message) {
-                errorMessage.innerHTML = `<i class="fas fa-exclamation-circle"></i><strong>Erro!</strong> ${message}`;
-                errorMessage.style.display = 'block';
-                successMessage.style.display = 'none';
-                errorMessage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            // Se o formulário foi enviado com sucesso (redirecionado de volta)
+            if (window.location.search.includes('?success=true')) {
+                showStatus('Solicitação enviada com sucesso! Entraremos em contato em até 24 horas.', 'success');
+                orcamentoForm.reset();
                 
-                setTimeout(() => {
-                    errorMessage.style.display = 'none';
-                }, 10000);
+                // Resetar seleções visuais
+                urgencyOptions.forEach(opt => opt.classList.remove('selected'));
+                serviceOptions.forEach(opt => {
+                    opt.style.background = 'rgba(255, 255, 255, 0.05)';
+                    opt.style.borderColor = 'var(--glass-border)';
+                });
             }
         });
     </script>
-    
-    <!-- Marca d'Água -->
-    <div class="watermark">
-        <i class="fas fa-shield-alt"></i>
-        Shield Security
-    </div>
 </body>
 </html>
