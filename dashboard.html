@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Shield Security</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Dashboard Compact Styles */
+        .dashboard-main {
+            padding: 1.5rem;
+            background: var(--bg-dark);
+            min-height: 100vh;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .welcome-section {
+            background: linear-gradient(135deg, var(--glass-bg), rgba(255, 255, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .welcome-content h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .welcome-content p {
+            color: var(--text-gray);
+            font-size: 0.95rem;
+        }
+        
+        .welcome-stats {
+            display: flex;
+            gap: 1.5rem;
+        }
+        
+        .stat-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-green);
+        }
+        
+        .stat-card i {
+            font-size: 1.5rem;
+            color: var(--accent-green);
+        }
+        
+        .stat-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.2rem;
+        }
+        
+        .stat-info p {
+            color: var(--text-gray);
+            font-size: 0.8rem;
+        }
+        
+        .quick-actions {
+            margin-bottom: 2rem;
+        }
+        
+        .quick-actions h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .action-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .action-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-green);
+        }
+        
+        .action-card i {
+            font-size: 2rem;
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+        }
+        
+        .action-card h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+        
+        .action-card p {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+        
+        .action-btn {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            color: var(--primary-dark);
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 0.85rem;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+        
+        .services-overview {
+            margin-bottom: 2rem;
+        }
+        
+        .services-overview h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .service-item {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .service-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-green);
+        }
+        
+        .service-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .service-header h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        
+        .service-status {
+            padding: 0.3rem 0.8rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+        }
+        
+        .service-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .service-detail {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+        }
+        
+        .service-detail span:first-child {
+            color: var(--text-gray);
+        }
+        
+        .service-detail span:last-child {
+            color: var(--text-light);
+            font-weight: 500;
+        }
+        
+        .recent-activity {
+            margin-bottom: 2rem;
+        }
+        
+        .recent-activity h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+        }
+        
+        .activity-list {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+        }
+        
+        .activity-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+        
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .activity-icon i {
+            font-size: 1rem;
+            color: var(--primary-dark);
+        }
+        
+        .activity-content h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.2rem;
+        }
+        
+        .activity-content p {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+        
+        .activity-time {
+            margin-left: auto;
+            font-size: 0.75rem;
+            color: var(--text-gray);
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+        }
+        
+        .user-info i {
+            color: var(--accent-green);
+        }
+        
+        .logout-btn {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            color: #ef4444;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+        }
+        
+        .logout-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        @media (max-width: 768px) {
+            .welcome-section {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .welcome-stats {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .activity-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            
+            .activity-time {
+                margin-left: 0;
+            }
+        }
+    </style>
+</head>
+<body class="dashboard-page">
+    <!-- Header Dashboard -->
+    <header class="header dashboard-header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Shield Security</span>
+                </div>
+                <div class="user-menu">
+                    <div class="user-info">
+                        <i class="fas fa-user-circle"></i>
+                        <span id="userName">Cliente</span>
+                    </div>
+                    <button id="logoutBtn" class="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Sair
+                    </button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="dashboard-main">
+        <div class="dashboard-container">
+            <!-- Welcome Section -->
+            <section class="welcome-section">
+                <div class="welcome-content">
+                    <h1>Bem-vindo à sua Área Restrita</h1>
+                    <p>Gerencie seus serviços de segurança de forma simples e segura</p>
+                </div>
+                <div class="welcome-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="stat-info">
+                            <h3>4</h3>
+                            <p>Serviços Ativos</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <h3>24/7</h3>
+                            <p>Monitoramento</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="stat-info">
+                            <h3>100%</h3>
+                            <p>Segurança</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Actions -->
+            <section class="quick-actions">
+                <h2>Ações Rápidas</h2>
+                <div class="actions-grid">
+                    <div class="action-card">
+                        <i class="fas fa-plus-circle"></i>
+                        <h3>Solicitar Serviço</h3>
+                        <p>Adicione novos serviços de segurança</p>
+                        <button class="action-btn">Solicitar</button>
+                    </div>
+                    <div class="action-card">
+                        <i class="fas fa-file-alt"></i>
+                        <h3>Relatórios</h3>
+                        <p>Visualize relatórios de segurança</p>
+                        <button class="action-btn">Ver Relatórios</button>
+                    </div>
+                    <div class="action-card">
+                        <i class="fas fa-cog"></i>
+                        <h3>Configurações</h3>
+                        <p>Gerencie suas preferências</p>
+                        <button class="action-btn">Configurar</button>
+                    </div>
+                    <div class="action-card">
+                        <i class="fas fa-headset"></i>
+                        <h3>Suporte</h3>
+                        <p>Fale com nossa equipe</p>
+                        <button class="action-btn">Contatar</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services Overview -->
+            <section class="services-overview">
+                <h2>Seus Serviços</h2>
+                <div class="services-list">
+                    <div class="service-item active">
+                        <div class="service-icon">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>Monitoramento por Câmeras</h3>
+                            <p>8 câmeras - 24/7 ativo</p>
+                            <span class="status active">Ativo</span>
+                        </div>
+                        <div class="service-actions">
+                            <button class="btn-small">Gerenciar</button>
+                        </div>
+                    </div>
+                    <div class="service-item active">
+                        <div class="service-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>Vigilância Patrimonial</h3>
+                            <p>Equipe de 4 guardas - Noturno</p>
+                            <span class="status active">Ativo</span>
+                        </div>
+                        <div class="service-actions">
+                            <button class="btn-small">Gerenciar</button>
+                        </div>
+                    </div>
+                    <div class="service-item active">
+                        <div class="service-icon">
+                            <i class="fas fa-fingerprint"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>Controle de Acesso</h3>
+                            <p>Sistema biométrico - 2 pontos</p>
+                            <span class="status active">Ativo</span>
+                        </div>
+                        <div class="service-actions">
+                            <button class="btn-small">Gerenciar</button>
+                        </div>
+                    </div>
+                    <div class="service-item pending">
+                        <div class="service-icon">
+                            <i class="fas fa-car"></i>
+                        </div>
+                        <div class="service-info">
+                            <h3>Segurança Veicular</h3>
+                            <p>Em instalação - Previsão: 3 dias</p>
+                            <span class="status pending">Pendente</span>
+                        </div>
+                        <div class="service-actions">
+                            <button class="btn-small">Detalhes</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Recent Activity -->
+            <section class="recent-activity">
+                <h2>Atividade Recente</h2>
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="activity-info">
+                            <h4>Sistema de câmeras atualizado</h4>
+                            <p>Firmware atualizado com sucesso</p>
+                            <span class="activity-time">Há 2 horas</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </div>
+                        <div class="activity-info">
+                            <h4>Alerta de movimento detectado</h4>
+                            <p>Setor Leste - Movimento normal</p>
+                            <span class="activity-time">Há 5 horas</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-user-check"></i>
+                        </div>
+                        <div class="activity-info">
+                            <h4>Equipe de vigilância escalonada</h4>
+                            <p>Turno noturno iniciado</p>
+                            <span class="activity-time">Há 8 horas</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <div class="activity-info">
+                            <h4>Relatório semanal gerado</h4>
+                            <p>Disponível para download</p>
+                            <span class="activity-time">Há 1 dia</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Script específico do dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            // Verificar autenticação
+            const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+            if (!userData) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Carregar dados do usuário
+            const user = JSON.parse(userData);
+            document.getElementById('userName').textContent = user.name || user.email.split('@')[0];
+
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', function() {
+                if (confirm('Tem certeza que deseja sair?')) {
+                    localStorage.removeItem('userData');
+                    sessionStorage.removeItem('userData');
+                    window.location.href = 'login.html';
+                }
+            });
+
+            // Ações dos botões
+            document.querySelectorAll('.action-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const card = this.closest('.action-card');
+                    const title = card.querySelector('h3').textContent;
+                    showNotification(`Funcionalidade "${title}" em desenvolvimento.`, 'info');
+                });
+            });
+
+            // Ações dos serviços
+            document.querySelectorAll('.service-item .btn-small').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const serviceItem = this.closest('.service-item');
+                    const serviceName = serviceItem.querySelector('h3').textContent;
+                    showNotification(`Gerenciando: ${serviceName}`, 'info');
+                });
+            });
+
+            // Animação dos cards
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('fade-in');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.action-card, .service-item, .activity-item').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Atualizar horário de login
+            const loginTime = new Date(user.loginTime);
+            const timeElement = document.createElement('div');
+            timeElement.className = 'login-time';
+            timeElement.innerHTML = `<i class="fas fa-clock"></i> Login: ${loginTime.toLocaleString('pt-BR')}`;
+            document.querySelector('.user-info').appendChild(timeElement);
+        });
+    </script>
+
+    <style>
+        /* Estilos específicos do Dashboard */
+        .dashboard-page {
+            background: linear-gradient(135deg, var(--primary-dark), var(--bg-light));
+            min-height: 100vh;
+        }
+
+        .dashboard-header {
+            background: rgba(10, 25, 41, 0.98);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .user-info i {
+            font-size: 1.5rem;
+            color: var(--accent-green);
+        }
+
+        .login-time {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            margin-top: 0.25rem;
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(239, 68, 68, 0.3);
+        }
+
+        .dashboard-main {
+            padding: 2rem 0;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .welcome-section {
+            margin-bottom: 3rem;
+        }
+
+        .welcome-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-content p {
+            color: var(--text-gray);
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+        }
+
+        .welcome-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-green);
+        }
+
+        .stat-card i {
+            font-size: 2rem;
+            color: var(--accent-green);
+        }
+
+        .stat-info h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-info p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .quick-actions,
+        .services-overview,
+        .recent-activity {
+            margin-bottom: 3rem;
+        }
+
+        .quick-actions h2,
+        .services-overview h2,
+        .recent-activity h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 2rem;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .action-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            transition: var(--transition);
+        }
+
+        .action-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-green);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .action-card i {
+            font-size: 3rem;
+            color: var(--accent-green);
+            margin-bottom: 1rem;
+        }
+
+        .action-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .action-card p {
+            color: var(--text-gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .action-btn,
+        .btn-small {
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            color: var(--primary-dark);
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .action-btn:hover,
+        .btn-small:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 255, 136, 0.3);
+        }
+
+        .services-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .service-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .service-item:hover {
+            transform: translateX(10px);
+            border-color: var(--accent-green);
+        }
+
+        .service-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .service-icon i {
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .service-info {
+            flex: 1;
+        }
+
+        .service-info h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .service-info p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status.active {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green);
+        }
+
+        .status.pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: #ffc107;
+            border: 1px solid #ffc107;
+        }
+
+        .activity-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .activity-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 15px;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            transition: var(--transition);
+        }
+
+        .activity-item:hover {
+            transform: translateX(10px);
+            border-color: var(--accent-green);
+        }
+
+        .activity-icon {
+            width: 50px;
+            height: 50px;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .activity-icon i {
+            font-size: 1.2rem;
+            color: var(--accent-green);
+        }
+
+        .activity-info {
+            flex: 1;
+        }
+
+        .activity-info h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .activity-info p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .activity-time {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+
+        /* Responsividade Dashboard */
+        @media (max-width: 768px) {
+            .welcome-content h1 {
+                font-size: 2rem;
+            }
+            
+            .welcome-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .service-item,
+            .activity-item {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .user-menu {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+    
+    <!-- Marca d'Água -->
+    <div class="watermark">
+        <i class="fas fa-shield-alt"></i>
+        Shield Security
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

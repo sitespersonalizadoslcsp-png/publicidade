@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Área Cliente - Shield Security</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Login Page Compact Styles */
+        .login-main {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 1000px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+        
+        .login-visual {
+            background: linear-gradient(135deg, var(--primary-blue), var(--bg-light));
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .security-badge {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            animation: badgePulse 3s ease-in-out infinite;
+        }
+        
+        @keyframes badgePulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(0, 255, 136, 0); }
+        }
+        
+        .security-badge i {
+            font-size: 2.2rem;
+            color: var(--primary-dark);
+        }
+        
+        .floating-icons {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+        
+        .floating-icons i {
+            position: absolute;
+            color: var(--accent-green);
+            opacity: 0.3;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .floating-icons i:nth-child(1) {
+            top: 20%;
+            left: 20%;
+            animation-delay: 0s;
+        }
+        
+        .floating-icons i:nth-child(2) {
+            top: 60%;
+            right: 20%;
+            animation-delay: 2s;
+        }
+        
+        .floating-icons i:nth-child(3) {
+            bottom: 20%;
+            left: 30%;
+            animation-delay: 4s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+        
+        .login-form-container {
+            padding: 3rem;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .login-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 0.8rem;
+        }
+        
+        .login-header p {
+            font-size: 0.95rem;
+            color: var(--text-gray);
+        }
+        
+        .login-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+        
+        .form-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 500;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+        
+        .form-group label i {
+            color: var(--accent-green);
+        }
+        
+        .form-group input {
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .form-group input::placeholder {
+            color: var(--text-gray);
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-green);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .password-input {
+            position: relative;
+        }
+        
+        .toggle-password {
+            position: absolute;
+            right: 0.8rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--accent-green);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .toggle-password:hover {
+            color: var(--text-light);
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-size: 0.7rem;
+            margin-top: 0.2rem;
+        }
+        
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .remember-me {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        
+        .remember-me input {
+            width: auto;
+        }
+        
+        .remember-me label {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            cursor: pointer;
+        }
+        
+        .forgot-password {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: var(--transition);
+        }
+        
+        .forgot-password:hover {
+            color: var(--text-light);
+        }
+        
+        .login-btn {
+            padding: 0.8rem 1.5rem;
+            background: linear-gradient(135deg, var(--accent-green), var(--accent-neon));
+            border: none;
+            border-radius: 8px;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+        
+        .login-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 255, 136, 0.3);
+        }
+        
+        .login-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--glass-border);
+        }
+        
+        .login-footer p {
+            color: var(--text-gray);
+            font-size: 0.8rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .contact-link {
+            color: var(--accent-green);
+            text-decoration: none;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        
+        .contact-link:hover {
+            color: var(--text-light);
+        }
+        
+        .demo-info {
+            text-align: center;
+            margin-top: 1rem;
+            padding: 0.8rem;
+            background: rgba(0, 255, 136, 0.1);
+            border: 1px solid rgba(0, 255, 136, 0.3);
+            border-radius: 8px;
+        }
+        
+        .demo-info p {
+            color: var(--accent-green);
+            font-size: 0.8rem;
+        }
+        
+        .back-home {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-light);
+            text-decoration: none;
+            transition: var(--transition);
+            font-size: 0.9rem;
+        }
+        
+        .back-home:hover {
+            color: var(--accent-green);
+        }
+        
+        @media (max-width: 768px) {
+            .login-container {
+                grid-template-columns: 1fr;
+                max-width: 350px;
+            }
+            
+            .login-visual {
+                padding: 1.5rem;
+            }
+            
+            .security-badge {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .security-badge i {
+                font-size: 1.5rem;
+            }
+            
+            .login-form-container {
+                padding: 1.5rem;
+            }
+            
+            .login-header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-options {
+                flex-direction: column;
+                gap: 0.8rem;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body class="login-page">
+    <!-- Header Simplificado -->
+    <header class="header">
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <i class="fas fa-shield-alt"></i>
+                    <span>Shield Security</span>
+                </div>
+                <a href="index.html" class="back-home">
+                    <i class="fas fa-arrow-left"></i>
+                    Voltar ao Início
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="login-main">
+        <div class="login-container">
+            <div class="login-content">
+                <div class="login-visual">
+                    <div class="security-badge">
+                        <i class="fas fa-shield-virus"></i>
+                    </div>
+                    <div class="floating-icons">
+                        <i class="fas fa-lock"></i>
+                        <i class="fas fa-key"></i>
+                        <i class="fas fa-user-shield"></i>
+                    </div>
+                </div>
+                
+                <div class="login-form-container">
+                    <div class="login-header">
+                        <h1>Área do Cliente</h1>
+                        <p>Acesse sua área restrita para gerenciar seus serviços de segurança</p>
+                    </div>
+                    
+                    <form id="loginForm" class="login-form">
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fas fa-envelope"></i>
+                                E-mail
+                            </label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                placeholder="seu@email.com" 
+                                required
+                                autocomplete="email"
+                            >
+                            <span class="error-message"></span>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="password">
+                                <i class="fas fa-lock"></i>
+                                Senha
+                            </label>
+                            <div class="password-input">
+                                <input 
+                                    type="password" 
+                                    id="password" 
+                                    name="password" 
+                                    placeholder="Digite sua senha" 
+                                    required
+                                    autocomplete="current-password"
+                                >
+                                <button type="button" class="toggle-password" id="togglePassword">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <span class="error-message"></span>
+                        </div>
+                        
+                        <div class="form-options">
+                            <div class="remember-me">
+                                <input type="checkbox" id="remember" name="remember">
+                                <label for="remember">Lembrar-me</label>
+                            </div>
+                            <a href="#" class="forgot-password">Esqueci minha senha</a>
+                        </div>
+                        
+                        <button type="submit" class="login-btn">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Entrar
+                        </button>
+                    </form>
+                    
+                    <div class="login-footer">
+                        <p>Ainda não é cliente?</p>
+                        <a href="#contact" class="contact-link">Solicitar Orçamento</a>
+                    </div>
+                    
+                    <div class="demo-info">
+                        <p><strong>Demo:</strong> Use qualquer e-mail e senha "demo123" para acessar</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+    <script>
+        // Script específico da página de login
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('loginForm');
+            const togglePassword = document.getElementById('togglePassword');
+            const passwordInput = document.getElementById('password');
+            const backHomeLink = document.querySelector('.back-home');
+            
+            // Toggle senha visível/oculta
+            togglePassword.addEventListener('click', function() {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                
+                const icon = this.querySelector('i');
+                icon.classList.toggle('fa-eye');
+                icon.classList.toggle('fa-eye-slash');
+            });
+            
+            // Validação do formulário
+            loginForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Limpar mensagens de erro anteriores
+                document.querySelectorAll('.error-message').forEach(msg => msg.textContent = '');
+                
+                const email = document.getElementById('email').value.trim();
+                const password = document.getElementById('password').value;
+                const remember = document.getElementById('remember').checked;
+                
+                // Validação de e-mail
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(email)) {
+                    showError('email', 'Por favor, insira um e-mail válido.');
+                    return;
+                }
+                
+                // Validação de senha
+                if (password.length < 6) {
+                    showError('password', 'A senha deve ter pelo menos 6 caracteres.');
+                    return;
+                }
+                
+                // Simulação de autenticação
+                const submitBtn = loginForm.querySelector('.login-btn');
+                const originalText = submitBtn.innerHTML;
+                
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Autenticando...';
+                submitBtn.disabled = true;
+                
+                setTimeout(() => {
+                    // Simulação de login bem-sucedido
+                    if (password === 'demo123' || password.length >= 6) {
+                        // Salvar informações no localStorage
+                        const userData = {
+                            email: email,
+                            name: email.split('@')[0],
+                            loginTime: new Date().toISOString(),
+                            remember: remember
+                        };
+                        
+                        if (remember) {
+                            localStorage.setItem('userData', JSON.stringify(userData));
+                        } else {
+                            sessionStorage.setItem('userData', JSON.stringify(userData));
+                        }
+                        
+                        // Redirecionar para o dashboard
+                        window.location.href = 'dashboard.html';
+                    } else {
+                        showError('password', 'E-mail ou senha incorretos.');
+                        submitBtn.innerHTML = originalText;
+                        submitBtn.disabled = false;
+                    }
+                }, 1500);
+            });
+            
+            // Função para mostrar erros
+            function showError(fieldId, message) {
+                const field = document.getElementById(fieldId);
+                const errorElement = field.parentElement.querySelector('.error-message');
+                errorElement.textContent = message;
+                field.style.borderColor = '#ef4444';
+                
+                // Remover erro após 3 segundos
+                setTimeout(() => {
+                    errorElement.textContent = '';
+                    field.style.borderColor = '';
+                }, 3000);
+            }
+            
+            // Validação em tempo real
+            document.getElementById('email').addEventListener('blur', function() {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (this.value && !emailRegex.test(this.value)) {
+                    showError('email', 'Por favor, insira um e-mail válido.');
+                } else {
+                    this.parentElement.querySelector('.error-message').textContent = '';
+                    this.style.borderColor = '';
+                }
+            });
+            
+            document.getElementById('password').addEventListener('blur', function() {
+                if (this.value && this.value.length < 6) {
+                    showError('password', 'A senha deve ter pelo menos 6 caracteres.');
+                } else {
+                    this.parentElement.querySelector('.error-message').textContent = '';
+                    this.style.borderColor = '';
+                }
+            });
+            
+            // Link "Esqueci minha senha"
+            document.querySelector('.forgot-password').addEventListener('click', function(e) {
+                e.preventDefault();
+                showNotification('Funcionalidade de recuperação de senha em desenvolvimento. Entre em contato com o suporte.', 'info');
+            });
+            
+            // Link "Solicitar Orçamento"
+            document.querySelector('.contact-link').addEventListener('click', function(e) {
+                e.preventDefault();
+                window.location.href = 'index.html#contact';
+            });
+            
+            // Verificar se já está logado
+            const userData = localStorage.getItem('userData') || sessionStorage.getItem('userData');
+            if (userData) {
+                window.location.href = 'dashboard.html';
+            }
+        });
+    </script>
+    
+    <!-- Marca d'Água -->
+    <div class="watermark">
+        <i class="fas fa-shield-alt"></i>
+        Shield Security
+    </div>
+</body>
+</html>
